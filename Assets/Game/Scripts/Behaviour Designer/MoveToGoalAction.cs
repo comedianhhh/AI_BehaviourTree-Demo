@@ -39,6 +39,7 @@ public class MoveToGoalAction : Action
 
     public override TaskStatus OnUpdate()
     {
+        Debug.Log(agent.destination);
         float stoppingDistance = agent.stoppingDistance;
         if (useAgentStoppingDistance == false)
         {
@@ -62,9 +63,10 @@ public class MoveToGoalAction : Action
                                                      Time.deltaTime * angularDampeningTime);
             }
 
+            Debug.Log("Moving"+Vector3.Distance(transform.position, agent.destination)+"speed :"+agent.isStopped);
             return TaskStatus.Running;
         }
-
+        Debug.Log("Arrived");
         animator.SetFloat("Speed", 0.0f);
         return TaskStatus.Success;
     }
