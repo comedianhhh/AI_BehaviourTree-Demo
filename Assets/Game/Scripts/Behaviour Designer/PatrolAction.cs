@@ -11,9 +11,10 @@ using UnityEngine.AI;
 public class PatrolAction : MoveToGoalAction
 {
     public SharedGameObjectList waypoints;
+    public SharedBool triggerIdle;
     public bool loop = true;
     private int index = 0;
-
+    public SharedInt numOfWaypoints = 0;
     public override void OnStart()
     {
         base.OnStart();
@@ -31,6 +32,14 @@ public class PatrolAction : MoveToGoalAction
         if (baseStatus != TaskStatus.Running && index != waypoints.Value.Count)
         {
             index++;
+            numOfWaypoints.Value++;
+
+            if (numOfWaypoints.Value % 3 == 0)
+            {
+                triggerIdle.Value = true;
+                return TaskStatus.Failure;
+            }
+
             if (index >= waypoints.Value.Count && loop == true)
             {
                 index = 0;
