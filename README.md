@@ -32,11 +32,27 @@ A modular implementation of a **Behavior Tree system** for game AI, showcasing e
 
 ### **Key Code Snippets**
 ```csharp
-// Example: Custom Decorator Node (Check if player is visible)
-public class IsPlayerVisible : DecoratorNode {
-    protected override void OnStart() {
-        // Access Blackboard
-        bool isVisible = blackboard.GetValue<bool>("PlayerVisible");
-        // ... logic
+// Example: ai action check
+[TaskName("Miner Bob Deposit")]
+[TaskCategory("Miner Bob")]
+[TaskDescription("Miner Bob will deposit a percentage of gold")]
+public class MinerBobDepositAction : MinerBobBaseAction
+{
+    public SharedFloat depositPercentage = 1.0f;
+
+    public override TaskStatus OnUpdate()
+    {
+        base.OnUpdate();
+
+        minerBob.Deposit(minerBob.currentGold * depositPercentage.Value);
+        Debug.Log($"Deposited gold! I have {minerBob.bankAccount} in the bank, getting close to retirement");
+
+        return TaskStatus.Success;
+    }
+
+    public override void OnReset()
+    {
+        base.OnReset();
+        depositPercentage.Value = 1.0f;
     }
 }
